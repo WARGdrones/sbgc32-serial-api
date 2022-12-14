@@ -72,6 +72,7 @@ extern 		"C" {
 	typedef _long__ signed int		i32;
 #endif
 
+#define DEV_STR_LENGTH 128
 
 /**	@addtogroup	LinuxDriver
  *	@{
@@ -79,7 +80,7 @@ extern 		"C" {
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  * 								  Hardware Constants
  */
-#define		__USB_ADDR				char dev [20]
+#define		__USB_ADDR				char dev [DEV_STR_LENGTH]
 
 /*  - - - - - User Defined Parameters - - - - - - */
 /*		   ### !!! ATTENTION !!! ###		  */
@@ -94,7 +95,7 @@ extern 		"C" {
  */
 typedef struct
 {
-	char	device [20];
+	char	device [DEV_STR_LENGTH];
 	int		devFD;
 
 }			Driver_t;
