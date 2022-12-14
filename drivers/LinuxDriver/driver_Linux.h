@@ -104,7 +104,7 @@ typedef struct
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  * 								 Function Prototypes
  */
-void DriverInit (void *Driver, __USB_ADDR);
+void DriverInit (void *Driver, __USB_ADDR, speed_t baud);
 
 ui32 GetTimeMs (void *Driver);
 

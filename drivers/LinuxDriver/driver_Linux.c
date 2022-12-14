@@ -34,7 +34,7 @@
  *	@param	*Driver - main hardware driver object
  *	@param	__USB_ADDR - (aka *char) path to connected SBGC32 device
  */
-void DriverInit (void *Driver, __USB_ADDR)
+void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
 {
 	Driver_t *drv = (Driver_t*)Driver;
 
@@ -53,8 +53,13 @@ void DriverInit (void *Driver, __USB_ADDR)
 
 	tcgetattr(drv->devFD, &portConfigurations);
 
-	cfsetispeed(&portConfigurations, B115200); 
-	cfsetospeed(&portConfigurations, B115200);
+	if (baud == B115200 || baud == B230400)
+	{
+		fprintf(stderr, "unsupported baud rate, defaulting to B115200\n");
+		baud = B115200;
+	}
+	cfsetispeed(&portConfigurations, baud); 
+	cfsetospeed(&portConfigurations, baud);
 
 	portConfigurations.c_cflag &= ~(PARENB | PARODD | CSTOPB | CRTSCTS);
 	portConfigurations.c_cflag |= CS8 | CREAD | CLOCAL;
