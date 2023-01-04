@@ -55,6 +55,11 @@ void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
 
 	if (baud == B115200 || baud == B230400)
 	{
+		//TODO:
+		baud = baud;
+	}
+	else 
+	{
 		fprintf(stderr, "unsupported baud rate, defaulting to B115200\n");
 		baud = B115200;
 	}
