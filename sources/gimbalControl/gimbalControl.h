@@ -128,6 +128,11 @@ typedef enum
  */
 typedef enum
 {
+	/** Applicable for all modes 
+	   frw. ver. 2.70b5+ */
+	CtrlF_CONTROL_FLAG_MIX_FOLLOW
+									= BIT_4_SET,
+
 	/** Applicable for CtrlM_MODE_ANGLE or CtrlM_MODE_ANGLE_REL_FRAME
 	   frw. ver. 2.70b1+ */
 	CtrlF_CONTROL_FLAG_TARGET_PRECISE
@@ -142,7 +147,7 @@ typedef enum
 									= BIT_6_SET,
 	/** frw. ver. 2.60+ */
 	CtrlF_CONTROL_FLAG_HIGH_RES_SPEED
-									= BIT_7_SET
+									= BIT_7_SET	
 
 }	ControlFlags_t;
 
