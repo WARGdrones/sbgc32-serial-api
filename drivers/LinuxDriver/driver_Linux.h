@@ -9,7 +9,7 @@
  *	____________________________________________________________________
  *
  *	@attention	<center><h3>
- *	Copyright © 2022 BaseCam Electronics™.</h3></center>
+ *	Copyright © 2023 BaseCam Electronics™.</h3></center>
  *	<center>All rights reserved.</center>
  *
  *	Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,43 +33,44 @@
  *  ____________________________________________________________________
  */
 
-#ifndef 	_DRIVER_LINUX_H_
-#define 	_DRIVER_LINUX_H_
+#ifndef _DRIVER_LINUX_H_
+#define _DRIVER_LINUX_H_
 
-#ifdef 		__cplusplus
-extern 		"C" {
+#ifdef __cplusplus
+extern "C"
+{
 #endif
 
-#include 	<stdio.h>
+#include <stdio.h>
 
-#include 	<sys/types.h>
-#include 	<sys/stat.h>
-#include 	<fcntl.h>
-#include 	<sys/ioctl.h>
-#include 	<unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
-#include 	<termios.h>
-#include 	<time.h>
+#include <termios.h>
+#include <time.h>
 
-#include 	"string.h"
-#include 	"stdlib.h"
+#include "string.h"
+#include "stdlib.h"
 
-#ifndef		SHORT_TYPE_NAMES
-#define		SHORT_TYPE_NAMES
-	#if defined __x86_64__
-		#define	_long__
-		#define	_L32__
-	#else
-		#define	_long__				long
-	#endif
+#ifndef SHORT_TYPE_NAMES
+#define SHORT_TYPE_NAMES
+#if defined __x86_64__
+#define _long__
+#define _L32__
+#else
+#define _long__ long
+#endif
 
-	typedef unsigned char			ui8;
-	typedef unsigned short			ui16;
-	typedef _long__ unsigned int	ui32;
+	typedef unsigned char ui8;
+	typedef unsigned short ui16;
+	typedef _long__ unsigned int ui32;
 
-	typedef signed char				i8;
-	typedef short signed int		i16;
-	typedef _long__ signed int		i32;
+	typedef signed char i8;
+	typedef short signed int i16;
+	typedef _long__ signed int i32;
 #endif
 
 #define DEV_STR_LENGTH 128
@@ -80,46 +81,45 @@ extern 		"C" {
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  * 								  Hardware Constants
  */
-#define		__USB_ADDR				char dev [DEV_STR_LENGTH]
+#define __USB_ADDR char dev[DEV_STR_LENGTH]
 
 /*  - - - - - User Defined Parameters - - - - - - */
 /*		   ### !!! ATTENTION !!! ###		  */
 /* 		 sudo chmod a+rwx /dev/ttyUSB0 		  */
-#define 	SBGC_SERIAL_PORT    	"/dev/ttyUSB0"	/*!<  Path to a connected SBGC32 device												*/
-/*  - - - - - - - - - - - - - - - - - - - - - - - */
+#define SBGC_SERIAL_PORT "/dev/ttyUSB0" /*!<  Path to a connected SBGC32 device												*/
+	/*  - - - - - - - - - - - - - - - - - - - - - - - */
 
-/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
- * 									Hardware Objects
- */
-/**	@brief	General driver structure
- */
-typedef struct
-{
-	char	device [DEV_STR_LENGTH];
-	int		devFD;
+	/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+	 * 									Hardware Objects
+	 */
+	/**	@brief	General driver structure
+	 */
+	typedef struct
+	{
+		char device[DEV_STR_LENGTH];
+		int devFD;
 
-}			Driver_t;
+	} Driver_t;
 
+	/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+	 * 								 Function Prototypes
+	 */
+	void DriverInit(void *Driver, __USB_ADDR, speed_t baud);
 
-/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
- * 								 Function Prototypes
- */
-void DriverInit (void *Driver, __USB_ADDR, speed_t baud);
+	ui32 GetTimeMs(void *Driver);
 
-ui32 GetTimeMs (void *Driver);
+	ui8 PortTransmitData(void *Driver, ui8 *data, ui16 size);
 
-ui8 PortTransmitData (void *Driver, ui8 *data, ui16 size);
+	ui16 GetAvailableBytes(void *Driver);
+	ui8 PortReceiveByte(void *Driver, ui8 *data);
 
-ui16 GetAvailableBytes (void *Driver);
-ui8 PortReceiveByte (void *Driver, ui8 *data);
-
-void PrintDebugData (char *data, ui16 length);
+	void PrintDebugData(char *data, ui16 length);
 /**	@}
  */
 
 /*  = = = = = = = = = = = = = = = = = = = = = = = */
-#ifdef 		__cplusplus
-			}
+#ifdef __cplusplus
+}
 #endif
 
-#endif 		/* _DRIVER_LINUX_H_ */
+#endif /* _DRIVER_LINUX_H_ */

@@ -6,7 +6,7 @@
  *	____________________________________________________________________
  *
  *	@attention	<center><h3>
- *	Copyright © 2022 BaseCam Electronics™.</h3></center>
+ *	Copyright © 2023 BaseCam Electronics™.</h3></center>
  *	<center>All rights reserved.</center>
  *
  *	Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@
 
 #include "driver_Linux.h"
 
-
 /**	@addtogroup	LinuxDriver
  *	@{
  */
@@ -34,9 +33,9 @@
  *	@param	*Driver - main hardware driver object
  *	@param	__USB_ADDR - (aka *char) path to connected SBGC32 device
  */
-void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
+void DriverInit(void *Driver, __USB_ADDR, speed_t baud)
 {
-	Driver_t *drv = (Driver_t*)Driver;
+	Driver_t *drv = (Driver_t *)Driver;
 
 	memcpy(&drv->device, dev, strlen(dev));
 
@@ -44,7 +43,7 @@ void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
 
 	if (drv->devFD == -1)
 	{
-		char errorStr [] = "Device not found!\n";
+		char errorStr[] = "Device not found!\n";
 		PrintDebugData(errorStr, strlen(errorStr));
 		return;
 	}
@@ -55,15 +54,15 @@ void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
 
 	if (baud == B115200 || baud == B230400)
 	{
-		//TODO:
+		// TODO:
 		baud = baud;
 	}
-	else 
+	else
 	{
 		fprintf(stderr, "unsupported baud rate, defaulting to B115200\n");
 		baud = B115200;
 	}
-	cfsetispeed(&portConfigurations, baud); 
+	cfsetispeed(&portConfigurations, baud);
 	cfsetospeed(&portConfigurations, baud);
 
 	portConfigurations.c_cflag &= ~(PARENB | PARODD | CSTOPB | CRTSCTS);
@@ -78,7 +77,6 @@ void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
 	tcsetattr(drv->devFD, TCSANOW, &portConfigurations);
 }
 
-
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *														 Timer Functions
  */
@@ -88,15 +86,14 @@ void DriverInit (void *Driver, __USB_ADDR, speed_t baud)
  *
  *	@return	Current time
  */
-ui32 GetTimeMs (void *Driver)
+ui32 GetTimeMs(void *Driver)
 {
-    struct timespec spec;
+	struct timespec spec;
 
-    clock_gettime(CLOCK_REALTIME, &spec);
+	clock_gettime(CLOCK_REALTIME, &spec);
 
 	return ((spec.tv_sec & 0x000FFFFF) * 1000) + (spec.tv_nsec / 1.0e6);
 }
-
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *															Tx Functions
@@ -109,20 +106,19 @@ ui32 GetTimeMs (void *Driver)
  *
  *	@return	0
  */
-ui8 PortTransmitData (void *Driver, ui8 *data, ui16 size)
+ui8 PortTransmitData(void *Driver, ui8 *data, ui16 size)
 {
-	Driver_t *drv = (Driver_t*)Driver;
+	Driver_t *drv = (Driver_t *)Driver;
 
 	ui16 count = 0;
-    while (count < size)
-    {
+	while (count < size)
+	{
 		write(drv->devFD, &data[count], 1);
-        count++;
-    }
+		count++;
+	}
 
 	return 0;
 }
-
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *															Rx Functions
@@ -133,15 +129,14 @@ ui8 PortTransmitData (void *Driver, ui8 *data, ui16 size)
  *
  *	@return	Number of available bytes
  */
-ui16 GetAvailableBytes (void *Driver)
+ui16 GetAvailableBytes(void *Driver)
 {
-	Driver_t *drv = (Driver_t*)Driver;
+	Driver_t *drv = (Driver_t *)Driver;
 
 	ui16 bytes;
 	ioctl(drv->devFD, FIONREAD, &bytes);
 	return bytes;
 }
-
 
 /**	@brief	Receives byte from serial port
  *
@@ -150,9 +145,9 @@ ui16 GetAvailableBytes (void *Driver)
  *
  *	@return	Receipt status (0 - receiving in progress | 1 - received)
  */
-ui8 PortReceiveByte (void *Driver, ui8 *data)
+ui8 PortReceiveByte(void *Driver, ui8 *data)
 {
-	Driver_t *drv = (Driver_t*)Driver;
+	Driver_t *drv = (Driver_t *)Driver;
 
 	if (!GetAvailableBytes(drv))
 		return 1;
@@ -162,7 +157,6 @@ ui8 PortReceiveByte (void *Driver, ui8 *data)
 	return 0;
 }
 
-
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *														 Debug Functions
  */
@@ -171,7 +165,7 @@ ui8 PortReceiveByte (void *Driver, ui8 *data)
  *	@param	*data - debug data
  *	@param	length - size of debug data
  */
-void PrintDebugData (char *data, ui16 length)
+void PrintDebugData(char *data, ui16 length)
 {
 	ui16 count = 0;
 	while (count < length)
