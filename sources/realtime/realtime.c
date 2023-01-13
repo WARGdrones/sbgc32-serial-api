@@ -341,7 +341,7 @@ TxRxStatus_t SBGC32_ParseDataStream (GeneralSBGC_t *generalSBGC, void *dataStrea
  *
  *	@return Communication status
  */
-TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealTimeDataCustom_t *realTimeDataCustom, RealTimeDataCustomFlag_t flags)
+TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealTimeDataCustom_t *realTimeDataCustom, ui32 flags)
 {
 	#if (SBGC_DEBUG_MODE == SET_OFF)
 
@@ -372,11 +372,11 @@ TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealT
 					realTimeDataCustom->IMU_Angles[AXIS_Z] = ReadWord(&cmd);
 					break;
 
-							case RTDCF_TARGET_ANGLES :
-								realTimeDataCustom->targetAngles[AXIS_X] = ReadWord(&cmd);
-								realTimeDataCustom->targetAngles[AXIS_Y] = ReadWord(&cmd);
-								realTimeDataCustom->targetAngles[AXIS_Z] = ReadWord(&cmd);
-								break;
+				case RTDCF_TARGET_ANGLES : 
+					realTimeDataCustom->targetAngles[AXIS_X] = ReadWord(&cmd);
+					realTimeDataCustom->targetAngles[AXIS_Y] = ReadWord(&cmd);
+					realTimeDataCustom->targetAngles[AXIS_Z] = ReadWord(&cmd);
+					break;
 
 				case RTDCF_TARGET_SPEED :
 					realTimeDataCustom->targetSpeed[AXIS_X] = ReadWord(&cmd);
@@ -384,11 +384,11 @@ TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealT
 					realTimeDataCustom->targetSpeed[AXIS_Z] = ReadWord(&cmd);
 					break;
 
-							case RTDCF_STATOR_ROTOR_ANGLE :
-								realTimeDataCustom->frameCamAngle[AXIS_X] = ReadWord(&cmd);
-								realTimeDataCustom->frameCamAngle[AXIS_Y] = ReadWord(&cmd);
-								realTimeDataCustom->frameCamAngle[AXIS_Z] = ReadWord(&cmd);
-								break;
+				case RTDCF_STATOR_ROTOR_ANGLE :
+					realTimeDataCustom->frameCamAngle[AXIS_X] = ReadWord(&cmd);
+					realTimeDataCustom->frameCamAngle[AXIS_Y] = ReadWord(&cmd);
+					realTimeDataCustom->frameCamAngle[AXIS_Z] = ReadWord(&cmd);
+					break;
 
 				case RTDCF_GYRO_DATA :
 					realTimeDataCustom->gyroData[AXIS_X] = ReadWord(&cmd);
@@ -396,14 +396,14 @@ TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealT
 					realTimeDataCustom->gyroData[AXIS_Z] = ReadWord(&cmd);
 					break;
 
-							case RTDCF_RC_DATA :
-								realTimeDataCustom->RC_Data[ROLL] = ReadWord(&cmd);
-								realTimeDataCustom->RC_Data[PITCH] = ReadWord(&cmd);
-								realTimeDataCustom->RC_Data[YAW] = ReadWord(&cmd);
-								realTimeDataCustom->RC_Data[CMD_] = ReadWord(&cmd);
-								realTimeDataCustom->RC_Data[FC_ROLL] = ReadWord(&cmd);
-								realTimeDataCustom->RC_Data[FC_PITCH] = ReadWord(&cmd);
-								break;
+				case RTDCF_RC_DATA :
+					realTimeDataCustom->RC_Data[ROLL] = ReadWord(&cmd);
+					realTimeDataCustom->RC_Data[PITCH] = ReadWord(&cmd);
+					realTimeDataCustom->RC_Data[YAW] = ReadWord(&cmd);
+					realTimeDataCustom->RC_Data[CMD_] = ReadWord(&cmd);
+					realTimeDataCustom->RC_Data[FC_ROLL] = ReadWord(&cmd);
+					realTimeDataCustom->RC_Data[FC_PITCH] = ReadWord(&cmd);
+					break;
 
 				case RTDCF_Z_VECTOR_H_VECTOR :
 					realTimeDataCustom->Z_Vector[AXIS_X] = ReadLong(&cmd);
@@ -414,10 +414,10 @@ TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealT
 					realTimeDataCustom->H_Vector[AXIS_Z] = ReadLong(&cmd);
 					break;
 
-							case RTDCF_RC_CHANNELS :
-								for (ui8 k = 0; k < 18; k++)
-									realTimeDataCustom->RC_Channels[i] = ReadWord(&cmd);
-								break;
+				case RTDCF_RC_CHANNELS :
+					for (ui8 k = 0; k < 18; k++)
+						realTimeDataCustom->RC_Channels[i] = ReadWord(&cmd);
+					break;
 
 				case RTDCF_ACC_DATA :
 					realTimeDataCustom->ACC_Data[AXIS_X] = ReadWord(&cmd);
@@ -425,27 +425,35 @@ TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealT
 					realTimeDataCustom->ACC_Data[AXIS_Z] = ReadWord(&cmd);
 					break;
 
-							case RTDCF_AHRS_DEBUG_INFO :
-								ReadBuff(&cmd, &realTimeDataCustom->AHRS_DebugInfo, sizeof(AHRS_DebugInfo_t), PM_AHRS_DEBUG_INFO);
-								break;
+				case RTDCF_AHRS_DEBUG_INFO :
+					ReadBuff(&cmd, &realTimeDataCustom->AHRS_DebugInfo, sizeof(AHRS_DebugInfo_t), PM_AHRS_DEBUG_INFO);
+					break;
 
 				case RTDCF_MOTOR4_CONTROL :
 					ReadBuff(&cmd, &realTimeDataCustom->motor4_Control, sizeof(Motor4_Control_t), PM_MOTOR_4_CONTROL);
 					break;
 
-							case RTDCF_ENCODER_RAW24 :
-							{
-								ReadBuff(&cmd, &realTimeDataCustom->encoderRaw24[AXIS_X], 3, PM_DEFAULT_8BIT);
-								ReadBuff(&cmd, &realTimeDataCustom->encoderRaw24[AXIS_Y * 3], 3, PM_DEFAULT_8BIT);
-								ReadBuff(&cmd, &realTimeDataCustom->encoderRaw24[AXIS_Z * 3], 3, PM_DEFAULT_8BIT);
-								break;
-							}
+				case RTDCF_ENCODER_RAW24 :
+				{
+					ReadBuff(&cmd, &realTimeDataCustom->encoderRaw24[AXIS_X], 3, PM_DEFAULT_8BIT);
+					ReadBuff(&cmd, &realTimeDataCustom->encoderRaw24[AXIS_Y * 3], 3, PM_DEFAULT_8BIT);
+					ReadBuff(&cmd, &realTimeDataCustom->encoderRaw24[AXIS_Z * 3], 3, PM_DEFAULT_8BIT);
+					break;
+				}
 
 				case RTDCF_IMU_ANGLES_RAD :
 					realTimeDataCustom->IMU_AnglesRad[AXIS_X] = ReadLong(&cmd);
 					realTimeDataCustom->IMU_AnglesRad[AXIS_Y] = ReadLong(&cmd);
 					realTimeDataCustom->IMU_AnglesRad[AXIS_Z] = ReadLong(&cmd);
 					break;
+				
+				case RTDCF_SCRIPT_VARS_FLOAT: /*TODO*/break;
+				case RTDCF_SCRIPT_VARS_INT16:/*TODO*/break;
+				case RTDCF_SYSTEM_POWER_STATE:
+					// realTimeDataCustom->
+					break;
+
+				case RTDCF_FRAME_CAM_RATE:/*TODO*/break;
 			}
 		}
 	}
