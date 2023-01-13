@@ -57,7 +57,7 @@ extern "C"
 
 #ifndef SHORT_TYPE_NAMES
 #define SHORT_TYPE_NAMES
-#if defined __x86_64__
+#if (defined(__x86_64__) || defined(__aarch64__) || defined(_M_ARM64))
 #define _long__
 #define _L32__
 #else
