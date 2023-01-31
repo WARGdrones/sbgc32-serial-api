@@ -357,7 +357,8 @@ typedef enum
 	PM_AUTO_PID_STATE,								/*!<  See @ref AutoPID_State_ParserStructDB											*/
 	PM_STATE_VARS,									/*!<  See @ref StateVars_ParserStructDB												*/
 	PM_AHRS_DEBUG_INFO,								/*!<  See @ref AHRS_DebugInfo_ParserStructDB										*/
-	PM_MOTOR_4_CONTROL								/*!<  See @ref Motor4_Control_ParserStructDB										*/
+	PM_MOTOR_4_CONTROL,								/*!<  See @ref Motor4_Control_ParserStructDB										*/
+	PM_SYSTEM_POWER_STATE
 
 }	ParserMap_t;
 /**	@}
@@ -847,6 +848,37 @@ typedef struct __PACKED__
 
 }			AHRS_DebugInfo_t;
 
+
+typedef enum __PACKED__
+{
+	POWER_STATE_ON_FROM_BACKUP = -2,										   // internal use
+	POWER_STATE_STARTUP = -1,				   // internal use
+	POWER_STATE_OFF = 0, // motors are OFF
+	POWER_STATE_ON = 1,											   // motors are ON
+	POWER_STATE_OFF_TEMPORARY = 2,									   // motors are temporarily OFF for calibration
+	POWER_STATE_OFF_PARKING = 3,								   // motors are temporarily OFF when entering parking position
+	POWER_STATE_ON_SAFE_STOP = 4,								   // motors are energized to softly drop the unbalanced payload before going OFF
+
+} SystemPowerStateState_t;
+
+typedef struct __PACKED__
+{
+	i16 motPower;
+	ui16 motCurrent;
+	i8 motTemp;
+	ui16 motFlags;
+	ui8 reserved[6];
+
+} MotorsPowerState_t;
+
+typedef struct __PACKED__
+{
+	MotorsPowerState_t motorsPower[3];
+	SystemPowerStateState_t systemPowerState;
+	ui16 batteryVoltage; /*units: 0.01V*/
+	ui16 totalCurrent;	 /*units: mA*/
+	ui16 systemFlags;
+} SystemPowerState_t;
 
 /**	@brief	Type of structure provides data
  *  		for the external controller
