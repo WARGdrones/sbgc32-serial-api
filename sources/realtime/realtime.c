@@ -450,7 +450,7 @@ TxRxStatus_t SBGC32_RequestRealTimeDataCustom (GeneralSBGC_t *generalSBGC, RealT
 				case RTDCF_SCRIPT_VARS_FLOAT: /*TODO*/break;
 				case RTDCF_SCRIPT_VARS_INT16:/*TODO*/break;
 				case RTDCF_SYSTEM_POWER_STATE:
-					// realTimeDataCustom->
+					ReadBuff(&cmd, &realTimeDataCustom->systemPowerState, sizeof(SystemPowerState_t), PM_SYSTEM_POWER_STATE);
 					break;
 
 				case RTDCF_FRAME_CAM_RATE:/*TODO*/break;

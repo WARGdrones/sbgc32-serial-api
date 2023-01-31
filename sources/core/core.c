@@ -159,6 +159,16 @@
 	/**	@}
 	 */
 
+	const SystemPowerState_t system_Power_State_ParserStruct;
+	
+	const ParserBlock_t System_Power_State_ParserStructDB[]=
+	{
+		VAR_BLOCK_(system_Power_State_ParserStruct.),
+	/*TODO TODO TODO */
+	};
+	
+	const ui8 System_Power_State_ParserStructDB_Size = countof_(System_Power_State_ParserStructDB);
+
 #endif
 
 
@@ -695,6 +705,11 @@ void SwapBytesInStruct (ui8 *structure, ui8 size, ParserMap_t parserMap)
 				arrDB = Motor4_Control_ParserStructDB;
 				arrDB_ElementsCount = Motor4_Control_ParserStructDB_Size;
 				break;
+
+			case PM_SYSTEM_POWER_STATE:
+				arrDB = System_Power_State_ParserStructDB;
+				arrDB_ElementsCount = System_Power_State_ParserStructDB_Size;
+
 
 			/* Prevent [-Wswitch] warnings (never come here) */
 						case PM_DEFAULT_8BIT :
