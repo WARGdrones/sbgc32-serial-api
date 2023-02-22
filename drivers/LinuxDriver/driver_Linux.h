@@ -48,6 +48,7 @@ extern "C"
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <linux/serial.h>
 
 #include <termios.h>
 #include <time.h>

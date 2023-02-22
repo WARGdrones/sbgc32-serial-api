@@ -75,6 +75,12 @@ void DriverInit(void *Driver, __USB_ADDR, speed_t baud)
 	portConfigurations.c_oflag &= ~OPOST;
 
 	tcsetattr(drv->devFD, TCSANOW, &portConfigurations);
+
+	//Set low latency mode, stackoverflow.com/a/43496519
+	struct serial_struct serial;
+	ioctl(drv->devFD, TIOCGSERIAL, &serial);
+	serial.flags |= ASYNC_LOW_LATENCY;
+	ioctl(drv->devFD, TIOCSSERIAL, &serial);
 }
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
