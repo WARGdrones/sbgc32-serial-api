@@ -107,6 +107,8 @@ extern "C"
 	 */
 	void DriverInit(void *Driver, __USB_ADDR, speed_t baud);
 
+	void DriverClose(void *Driver);
+
 	ui32 GetTimeMs(void *Driver);
 
 	ui8 PortTransmitData(void *Driver, ui8 *data, ui16 size);
