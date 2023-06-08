@@ -68,7 +68,7 @@ extern "C"
 #endif
 	/*  = = = = = = = = = = = = = = = = = = = = = = = */
 
-#include "../core/core.h"
+#include "core.h"
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *								Macros and Constants

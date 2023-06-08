@@ -43,7 +43,7 @@ void DriverInit(void *Driver, __USB_ADDR, speed_t baud)
 
 	if (drv->devFD == -1)
 	{
-		char errorStr[] = "Device not found!\n";
+		char errorStr[] = "SBGC Driver: Device not found!\n";
 		PrintDebugData(errorStr, strlen(errorStr));
 		return;
 	}
@@ -52,16 +52,15 @@ void DriverInit(void *Driver, __USB_ADDR, speed_t baud)
 
 	tcgetattr(drv->devFD, &portConfigurations);
 
-	if (baud == B115200 || baud == B230400)
+	if (baud != B115200 && baud != B230400)
 	{
-		// TODO:
-		baud = baud;
+		fprintf(stderr, "SBGC Driver: unsupported baud rate, exiting\n");
+		// TODO: Is this closed if the code does not fail here? :D (I know, it's not)
+		close(drv->devFD);
+		drv->devFD == -1;
+		return;
 	}
-	else
-	{
-		fprintf(stderr, "unsupported baud rate, defaulting to B115200\n");
-		baud = B115200;
-	}
+
 	cfsetispeed(&portConfigurations, baud);
 	cfsetospeed(&portConfigurations, baud);
 
@@ -81,6 +80,21 @@ void DriverInit(void *Driver, __USB_ADDR, speed_t baud)
 	ioctl(drv->devFD, TIOCGSERIAL, &serial);
 	serial.flags |= ASYNC_LOW_LATENCY;
 	ioctl(drv->devFD, TIOCSSERIAL, &serial);
+}
+
+/**	@brief	Closes the driver object
+ *
+ *	@param	*Driver - main hardware driver object
+ */
+void DriverClose(void *Driver)
+{
+	Driver_t *drv = (Driver_t *)Driver;
+
+	if (drv->devFD != -1)
+	{
+		close(drv->devFD);
+		drv->devFD = -1;
+	}
 }
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
