@@ -5,8 +5,8 @@ project(sbgc32-serial-api)
 set(CMAKE_CXX_STANDARD 11)
 
 # Set source files path
-set(PATH_TO_SOURCES sources)
-set(PATH_TO_DRIVERS drivers/LinuxDriver)
+set(PATH_TO_SOURCES serialAPI/sources)
+set(PATH_TO_DRIVERS serialAPI/drivers/LinuxDriver)
 
 # Add source files
 set(SOURCES
