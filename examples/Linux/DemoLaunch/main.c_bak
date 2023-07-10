@@ -93,11 +93,53 @@ int main ()
 
     /* Data Stream Configurations */
     DataStreamInterval.cmdID = CMD_REALTIME_DATA_CUSTOM;
-    DataStreamInterval.intervalMs = 10;
+    // DataStreamInterval.intervalMs = 10000;
+    // DataStreamInterval.syncToData = STD_SYNC_OFF;
+    // this will set the data to be sent on every xth internal update of the data to be transmitted
+    DataStreamInterval.intervalMs = 1;
     DataStreamInterval.syncToData = STD_SYNC_ON;
 
+    /* For more information see the SBGC32_RequestRealTimeDataCustom function.
+       Total packets length = 20 bytes:
+       ui16 timestampMs						 i16 [3]				i16 [3]			i16 [3] */
+    // ui32 DataStreamIntervalConfig = RTDCF_STATOR_ROTOR_ANGLE | RTDCF_GYRO_DATA | RTDCF_ACC_DATA;
     ui32 DataStreamIntervalConfig = RTDCF_STATOR_ROTOR_ANGLE | RTDCF_SYSTEM_POWER_STATE;
     memcpy(DataStreamInterval.config, &DataStreamIntervalConfig, sizeof(DataStreamIntervalConfig));
+
+    /* Data Stream Event Configurations */
+    DataStreamIntervalMotorEvent.cmdID = CMD_EVENT;
+    DataStreamIntervalMotorEvent.config[0]= EID_EVENT_ID_MOTOR_STATE;
+    // DataStreamIntervalMotorEvent.config[0]= EID_EVENT_ID_EMERGENCY_STOP;
+    DataStreamIntervalMotorEvent.config[1] = EVENT_TYPE_ON; // | EVENT_TYPE_OFF;
+    DataStreamIntervalMotorEvent.intervalMs = 1;
+    DataStreamIntervalMotorEvent.syncToData = STD_SYNC_OFF;
+
+	/* Adj Vars Setting */
+	#if (SBGC_DEBUG_MODE)
+
+		InitAdjVar(&AdjVarsGeneral[0], &AdjVarsDebugInfoArray[ADJ_VAL_ACC_LIMITER_ROLL]);
+		InitAdjVar(&AdjVarsGeneral[1], &AdjVarsDebugInfoArray[ADJ_VAL_ACC_LIMITER_PITCH]);
+		InitAdjVar(&AdjVarsGeneral[2], &AdjVarsDebugInfoArray[ADJ_VAL_ACC_LIMITER_YAW]);
+
+	#else
+
+		AdjVarsGeneral[0].ID = ADJ_VAL_ACC_LIMITER_ROLL;
+		AdjVarsGeneral[0].minValue = 0;
+		AdjVarsGeneral[0].maxValue = 1275;
+		AdjVarsGeneral[0].varType = _UNSIGNED_SHORT_;
+
+		AdjVarsGeneral[1].ID = ADJ_VAL_ACC_LIMITER_PITCH;
+		AdjVarsGeneral[1].minValue = 0;
+		AdjVarsGeneral[1].maxValue = 1275;
+		AdjVarsGeneral[1].varType = _UNSIGNED_SHORT_;
+
+		AdjVarsGeneral[2].ID = ADJ_VAL_ACC_LIMITER_YAW;
+		AdjVarsGeneral[2].minValue = 0;
+		AdjVarsGeneral[2].maxValue = 1275;
+		AdjVarsGeneral[2].varType = _UNSIGNED_SHORT_;
+
+	#endif
+
 
     /* - - - - - - - - - - - - Program Launch - - - - - - - - - - - - */
 
@@ -105,11 +147,20 @@ int main ()
     SBGC32_CheckConfirmation(&SBGC_1, &Confirm, CMD_RESET);
     sleep(15);
 
+    // PrintBoardParameters(P_CURRENT_PROFILE);
+
     SBGC32_ControlConfig(&SBGC_1, &ControlConfig, &Confirm);
+    // SBGC32_DemoControl();
 
     TxRxStatus_t error = TX_RX_OK;
 
-    // request custom rt data stream
+    // motor/errror event stream:
+    // if (error = SBGC32_RequestDataStream(&SBGC_1, &DataStreamIntervalMotorEvent, &Confirm))
+    // {
+    //     printf("Data Stream Interval Setup error 1\n");
+    //     // SBGC32_RequestDataStream(&SBGC_1, &DataStreamInterval, &Confirm);
+    // }
+    // custom rt data stream
     if (error = SBGC32_RequestDataStream(&SBGC_1, &DataStreamInterval, &Confirm))
     {
         printf("Data Stream Interval Setup error\n");
@@ -117,10 +168,68 @@ int main ()
     // // disable stream again
     sleep(2);
     DataStreamInterval.intervalMs = 0;
-    // TODO: this always fails with RX_TIMEOUT_ERROR, regardless of SBGC_1.rxTimeout
     if (error = SBGC32_RequestDataStream(&SBGC_1, &DataStreamInterval, &Confirm))
     {
         printf("Data Stream Interval Stop error \n");
+    }
+
+
+    // DataStreamInterval_t DataStreamIntervalRTD4;
+    // DataStreamIntervalRTD4.cmdID = CMD_REALTIME_DATA_4;
+    // DataStreamIntervalRTD4.intervalMs = 2;
+    // DataStreamIntervalRTD4.syncToData = STD_SYNC_ON;
+    // if (error = SBGC32_RequestDataStream(&SBGC_1, &DataStreamIntervalRTD4, &Confirm))
+    // {
+    //     printf("Data Stream Interval Setup error 4\n");
+    // }
+
+    /*  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
+            RealTimeData_t RTData;
+
+    while (1)
+    {
+        /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+        /*                     Start Worker Cycle                     */
+        /* __________________________________________________________ */
+
+            // if (error = SBGC32_ParseDataStream(&SBGC_1, &RTData, DataStreamIntervalRTD4.cmdID))
+            // {
+            //     printf("Data Stream Parse error\n");
+            // }
+    
+            if (error = SBGC32_ParseDataStream(&SBGC_1, DataStreamBuff, DataStreamInterval.cmdID))
+            {
+                printf("Data Stream Parse error\n");
+            }
+            // Event_t event;
+
+            // if (error = SBGC32_ParseDataStream(&SBGC_1, &event, DataStreamIntervalMotorEvent.cmdID))
+            // {
+            //     printf("Data Stream Parse error\n");
+            // }
+            // else 
+            // {
+            //     if (event.eventID == EID_EVENT_ID_MOTOR_STATE)
+            //     printf("Motors on stuff received\n");
+            //     if (event.eventID == EID_EVENT_ID_EMERGENCY_STOP)
+            //     printf("Emergency stop stuff received\n");
+            //     if (event.param[0] > 0)
+            //     printf("Motors on stuff at 0 received\n");
+            //     if (event.param[1] > 0)
+            //     printf("Motors on stuff at 1received\n");
+
+            // }
+        // }
+        Control.AxisC[YAW].angle = DEGREE_TO_ANGLE_INT(0);
+        Control.AxisC[PITCH].angle = DEGREE_TO_ANGLE_INT(0);
+        SBGC32_Control(&SBGC_1, &Control);
+   
+        PrintDataStream(DataStreamBuff);
+
+
+        usleep(1000000/10);
+
+        /*  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
     }
 
     return 0;

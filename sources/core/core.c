@@ -989,9 +989,9 @@ TxRxStatus_t SBGC32_DefaultInit (GeneralSBGC_t *generalSBGC, TxFunc_t TxFunc, Rx
 	generalSBGC->GetTimeFunc = GetTimeFunc;
 
 	generalSBGC->protocolVersion = protocolVersion;
-	generalSBGC->txTimeout = SBGC_TX_WAITING;
-	generalSBGC->rxTimeout = SBGC_RX_WAITING;
-	generalSBGC->txrxTimeout = SBGC_RX_WAITING;
+	generalSBGC->txTimeout = 2*SBGC_TX_WAITING;
+	generalSBGC->rxTimeout = 2*SBGC_RX_WAITING;
+	generalSBGC->txrxTimeout = 2*SBGC_RX_WAITING;
 
 	generalSBGC->_txErrorsCount = 0;
 	generalSBGC->_rxErrorsCount = 0;

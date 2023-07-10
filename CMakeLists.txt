@@ -3,6 +3,7 @@ project(sbgc32-serial-api)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Set source files path
 set(PATH_TO_SOURCES sources)
@@ -43,6 +44,12 @@ add_library(${PROJECT_NAME} SHARED
     ${HEADERS}
 )
 
+#add Demo executable
+add_executable(${PROJECT_NAME}_demo
+  examples/Linux/DemoLaunch/main.c
+)
+target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME})
+
 # Set include directories
 target_include_directories(${PROJECT_NAME} INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -63,7 +70,7 @@ install(TARGETS ${PROJECT_NAME}
   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
 )
 
-# # Install include directories
+# Install include directories
 install(FILES ${HEADERS}
   DESTINATION include/${PROJECT_NAME}
 )
