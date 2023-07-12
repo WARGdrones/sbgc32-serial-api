@@ -45,10 +45,10 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 #add Demo executable
-add_executable(${PROJECT_NAME}_demo
-  examples/Linux/DemoLaunch/main.c
-)
-target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME})
+# add_executable(${PROJECT_NAME}_demo
+#   examples/Linux/DemoLaunch/main.c
+# )
+# target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME})
 
 # Set include directories
 target_include_directories(${PROJECT_NAME} INTERFACE
