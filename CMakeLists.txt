@@ -62,7 +62,7 @@ foreach(header ${HEADERS})
 endforeach()
 
 # set the version properties of the target
-set_target_properties(jetson-utils PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
 
 # find_package(FICKDICH REQUIRED)
 # Install library (and header files ?)
