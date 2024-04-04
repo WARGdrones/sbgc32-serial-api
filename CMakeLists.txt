@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
-project(sbgc32-serial-api)
+project(sbgc32-serial-api VERSION 0.1.0)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_BUILD_TYPE Debug)
+# set(CMAKE_BUILD_TYPE Debug)
 
 # Set source files path
 set(PATH_TO_SOURCES sources)
@@ -61,14 +61,18 @@ foreach(header ${HEADERS})
   target_include_directories(${PROJECT_NAME} PRIVATE ${header_path})
 endforeach()
 
+# set the version properties of the target
+set_target_properties(jetson-utils PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
+
+# find_package(FICKDICH REQUIRED)
 # Install library (and header files ?)
-install(TARGETS ${PROJECT_NAME}
-  EXPORT ${PROJECT_NAME}Targets
-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
-)
+# install(TARGETS ${PROJECT_NAME}
+#   EXPORT ${PROJECT_NAME}Targets
+#   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+#   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+#   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+#   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
+# )
 
 # Install include directories
 install(FILES ${HEADERS}
