@@ -52,10 +52,32 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 #add Demo executable
-# add_executable(${PROJECT_NAME}_demo
-#   examples/Linux/DemoLaunch/main.c
-# )
-# target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME})
+# check if BUILD_EXAMPLES is set
+option(BUILD_EXAMPLES "Build examples" OFF)
+if(BUILD_EXAMPLES)
+  include_directories(
+    ${PATH_TO_SOURCES}/adjvar
+    ${PATH_TO_SOURCES}/calib
+    ${PATH_TO_SOURCES}/core
+    ${PATH_TO_SOURCES}/eeprom
+    ${PATH_TO_SOURCES}/gimbalControl
+    ${PATH_TO_SOURCES}/imu
+    ${PATH_TO_SOURCES}/profiles
+    ${PATH_TO_SOURCES}/realtime
+    ${PATH_TO_SOURCES}/service
+    ${PATH_TO_DRIVERS}
+    )
+    
+  message(STATUS "Building examples")
+  add_executable(${PROJECT_NAME}_demo
+    examples/Linux/DemoLaunch/main.c
+  )
+  target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME})
+  install(TARGETS ${PROJECT_NAME}_demo DESTINATION "${CMAKE_INSTALL_BINDIR}")
+
+  # add_subdirectory(examples/Linux/DemoLaunch)
+endif()
+
 
 # Set include directories
 target_include_directories(${PROJECT_NAME} INTERFACE
@@ -71,7 +93,6 @@ endforeach()
 # set the version properties of the target
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
 
-# find_package(FICKDICH REQUIRED)
 # Install library (and header files ?)
 # install(TARGETS ${PROJECT_NAME}
 #   EXPORT ${PROJECT_NAME}Targets
