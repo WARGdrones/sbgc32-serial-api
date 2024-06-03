@@ -1,10 +1,11 @@
-#include "sbgc32-serial-api/driver_Linux.h"
+#include "driver_Linux.h"
 
-#include "sbgc32-serial-api/adjvar.h"
-#include "sbgc32-serial-api/gimbalControl.h"
-#include "sbgc32-serial-api/profiles.h"
-#include "sbgc32-serial-api/realtime.h"
-#include "sbgc32-serial-api/service.h"
+#include "adjvar.h"
+#include "gimbalControl.h"
+#include "profiles.h"
+#include "realtime.h"
+#include "service.h"
+#include <string.h> 
 
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
@@ -51,7 +52,7 @@ void PrintDataStream (ui8 *pBuff);
 
 /*  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
-int main ()
+int main(int argc, char **argv)
 {
     /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
     /*                         Initialization                         */
@@ -61,7 +62,15 @@ int main ()
 
     /* Driver Init */
     SBGC_1.Drv = malloc(sizeof(Driver_t));
-    DriverInit(SBGC_1.Drv, "/dev/ttyUSB0", B230400);
+    // read serial port from command line args
+    char port[200] = "/dev/ttyUSB0";
+    if (argc > 1)
+    {
+        strcpy(port, argv[1]);
+    }
+    printf("Using port %s\n", port);
+
+    DriverInit(SBGC_1.Drv, port, B230400);
 
     /* High Layer Init */
     SBGC32_DefaultInit(&SBGC_1, PortTransmitData, PortReceiveByte, GetAvailableBytes,
