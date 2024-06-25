@@ -102,7 +102,7 @@ typedef     void 					(*TxDebugFunc_t)(char *data, ui16 length);
 /*  - - - - - User Defined Parameters - - - - - - */
 #define		SYS_BIG_ENDIAN			SET_OFF			/*!<  Memory organization of target-control device.
 	 	 	 	 	 	 	 	 	 	 	 	 	 	  LITTLE ENDIAN if the SYS_BIG_ENDIAN macro is set off							*/
-#define		SBGC_DEBUG_MODE			SET_OFF			/*!<  Debug mode flag for handling detailed system information						*/
+// #define		SBGC_DEBUG_MODE			SET_OFF			/*!<  Debug mode flag for handling detailed system information						*/
 
 #define     MAX_BUFF_SIZE           256				/*!<  256 is recommended value. Maximum buffer size for communication with SBGC32	*/
 
