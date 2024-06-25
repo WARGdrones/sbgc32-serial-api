@@ -55,7 +55,11 @@ extern 		"C" {
 #include 		<sys/ioctl.h>
 #include 		<unistd.h>
 #include 		<termios.h>
+#include <linux/serial.h>
+
 #include 		<time.h>
+#include "string.h"
+#include "stdlib.h"
 
 /**	@addtogroup	LinuxDriver
  *	@{
@@ -82,7 +86,10 @@ typedef struct
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  * 								 Function Prototypes
  */
-void DriverInit (void **driver, const char *dev);
+void DriverInit (void **driver, const char *dev , speed_t baud);
+
+void DriverClose(void *Driver);
+
 
 ui32 GetTimeMs (void *driver);
 

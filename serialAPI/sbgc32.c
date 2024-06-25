@@ -51,7 +51,7 @@ TxRxStatus_t SBGC32_Init (GeneralSBGC_t *generalSBGC)
 
 	#elif (SBGC_USE_LINUX_DRIVER)
 
-		DriverInit(&generalSBGC->Drv, SBGC_SERIAL_PORT);
+		DriverInit(&generalSBGC->Drv, SBGC_SERIAL_PORT, B115200);
 
 		return SBGC32_ManualInit(generalSBGC, PortTransmitData, PortReceiveByte, GetAvailableBytes,
 								 PrintDebugData, GetTimeMs, sprintf, SBGC_PROTOCOL_V2);

@@ -29,7 +29,7 @@
  *	____________________________________________________________________
  */
 
-#include "../../sbgc32.h"
+#include "sbgc32.h"
 
 
 #if (SBGC_USE_LINUX_DRIVER)
@@ -37,12 +37,14 @@
 /**	@addtogroup	LinuxDriver
  *	@{
  */
-/**	@brief	Initializes the driver object from GeneralSBGC_t
+/**	@brief	Initializes the driver object from GeneralSBGC_t with specified baud rate
  *
  *	@param	**driver - main hardware driver object
  *	@param	*dev - path to a connected SBGC32 device
+ *	@param	baud - baud rate
  */
-void DriverInit (void **driver, const char *dev)
+
+void DriverInit (void **driver, const char *dev, speed_t baud)
 {
 	*driver = malloc(sizeof(Driver_t));
 
@@ -56,7 +58,7 @@ void DriverInit (void **driver, const char *dev)
 
 	if (drv->devFD == -1)
 	{
-		char errorStr [] = "Device not found!\n";
+		char errorStr [] = "SBGC Driver: Device not found!\n";
 		PrintDebugData(errorStr, strlen(errorStr));
 		return;
 	}
@@ -65,8 +67,17 @@ void DriverInit (void **driver, const char *dev)
 
 	tcgetattr(drv->devFD, &portConfigurations);
 
-	cfsetispeed(&portConfigurations, B115200);
-	cfsetospeed(&portConfigurations, B115200);
+	if (baud != B115200 && baud != B230400)
+	{
+		fprintf(stderr, "SBGC Driver: unsupported baud rate, exiting\n");
+		// TODO: Is this closed if the code does not fail here? :D (I know, it's not)
+		close(drv->devFD);
+		drv->devFD == -1;
+		return;
+	}
+
+	cfsetispeed(&portConfigurations, baud);
+	cfsetospeed(&portConfigurations, baud);
 
 	portConfigurations.c_cflag &= ~(PARENB | PARODD | CSTOPB | CRTSCTS);
 	portConfigurations.c_cflag |= CS8 | CREAD | CLOCAL;
@@ -78,8 +89,28 @@ void DriverInit (void **driver, const char *dev)
 	portConfigurations.c_oflag &= ~OPOST;
 
 	tcsetattr(drv->devFD, TCSANOW, &portConfigurations);
+
+	//Set low latency mode, stackoverflow.com/a/43496519
+	struct serial_struct serial;
+	ioctl(drv->devFD, TIOCGSERIAL, &serial);
+	serial.flags |= ASYNC_LOW_LATENCY;
+	ioctl(drv->devFD, TIOCSSERIAL, &serial);
 }
 
+/**	@brief	Closes the driver object
+ *
+ *	@param	*Driver - main hardware driver object
+ */
+void DriverClose(void *Driver)
+{
+	Driver_t *drv = (Driver_t *)Driver;
+
+	if (drv->devFD != -1)
+	{
+		close(drv->devFD);
+		drv->devFD = -1;
+	}
+}
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *														 Timer Functions
