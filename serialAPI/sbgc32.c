@@ -67,6 +67,32 @@ TxRxStatus_t SBGC32_Init (GeneralSBGC_t *generalSBGC)
 		#error "When using a custom driver, use the SBGC32_ManualInit() function!"
 	#endif
 }
+
+/**	@brief	General initialization function with custom serial port and baudrate.
+ * 			Sets library variables from configurations
+ *
+ * 	@param	*generalSBGC - serial connection descriptor
+ * 	@param	*dev - path to a serial port connected to SBGC32 device
+ * 	@param	baud - baud rate to use for the serial port
+ *
+ *	@return	Communication status
+ */
+TxRxStatus_t SBGC32_Init_Custom (GeneralSBGC_t *generalSBGC, const char *dev, speed_t baud)
+{
+
+
+	#if (SBGC_USE_LINUX_DRIVER)
+
+		if(!DriverInit(&generalSBGC->Drv, dev, baud))
+			return RX_EMPTY_BUFF_ERROR;
+
+		return SBGC32_ManualInit(generalSBGC, PortTransmitData, PortReceiveByte, GetAvailableBytes,
+								 PrintDebugData, GetTimeMs, sprintf, SBGC_PROTOCOL_V2);
+	#else
+		#error "When using a custom driver, use the SBGC32_ManualInit() function!"
+	#endif
+}
+
 /**	@}
  */
 

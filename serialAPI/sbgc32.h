@@ -104,6 +104,8 @@ extern		"C" {
  *	@{
  */
 TxRxStatus_t SBGC32_Init (GeneralSBGC_t *generalSBGC);
+TxRxStatus_t SBGC32_Init_Custom (GeneralSBGC_t *generalSBGC, const char *dev, speed_t baud);
+
 /**	@}
  */
 
