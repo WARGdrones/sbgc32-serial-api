@@ -57,6 +57,7 @@ extern		"C" {
 
 /* Kernel code */
 #include	"core.h"
+#include 	<termios.h>
 
 /* Enable used modules */
 #if (SBGC_ADJVAR_MODULE)
