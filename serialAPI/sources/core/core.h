@@ -654,6 +654,7 @@ typedef enum
 	MENU_CMD_TRIPOD_MODE_OFF		= 72,
 	MENU_CMD_TRIPOD_MODE_ON			= 73,
 	MENU_CMD_SET_RC_TRIM			= 74,
+	MENU_CMD_MOVE_TO_STARTUP_POS 	= 75,
 
 	/* only for MainParamsExt2_t.startupAction */
 	MENU_BUTTON_IS_PRESSED			= BIT_7_SET
