@@ -44,16 +44,52 @@ void PrintDataStream (ui8 *pBuff);
 
 /*  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
-int main ()
+int main(int argc, char **argv)
 {
     /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
     /*                         Initialization                         */
     /* ______________________________________________________________ */
 
     /*  - - - - - - - - - - Software Initialization - - - - - - - - - */
+    char port[200] = "/dev/ttyUSB0";
+    if (argc > 1)
+    {
+        strcpy(port, argv[1]);
+    }
+    printf("Using port: %s\n", port);
+
+    speed_t baud = B115200;
+
+    if (argc > 2)
+    {
+        int b = atoi(argv[2]);
+        if (b == 115200)
+        {
+            printf("Setting baud rate: B115200 \n");
+            baud = B115200;
+        }
+        else if (b == 230400)
+        {
+            printf("Setting baud rate: B230400 \n");
+            baud = B230400;
+        }
+        else 
+        {
+            printf("Invalid baud rate: %d\n", b);
+            return 1;
+        }
+    }
+    else 
+    {
+        printf("Using default baud rate: B115200\n");
+    }
 
     /* SimpleBGC32 Init */
-    SBGC32_Init(&SBGC32_Device);
+    if (SBGC32_Init_Custom(&SBGC32_Device, port, baud))
+    {
+        printf("SBGC32_Init_Custom failed\n");
+        return 1;
+    }
 
     /* Control Configurations */
     ControlConfig.AxisCC[ROLL].angleLPF = 6;
@@ -265,6 +301,9 @@ void PrintDataStream (ui8 *pBuff)
 
     BuffRPx += ConvertWithPM(RealTimeDataCustom.frameCamAngle, &pBuff[BuffRPx],
                              sizeof(RealTimeDataCustom.targetAngles), PM_DEFAULT_16BIT);
+    // get PM_SYSTEM_POWER_STATE
+    BuffRPx += ConvertWithPM(&RealTimeDataCustom.systemPowerState, &pBuff[BuffRPx],
+                             sizeof(RealTimeDataCustom.systemPowerState), PM_SYSTEM_POWER_STATE);
     BuffRPx += ConvertWithPM(RealTimeDataCustom.gyroData, &pBuff[BuffRPx],
                              sizeof(RealTimeDataCustom.gyroData), PM_DEFAULT_16BIT);
     BuffRPx += ConvertWithPM(RealTimeDataCustom.ACC_Data, &pBuff[BuffRPx],
