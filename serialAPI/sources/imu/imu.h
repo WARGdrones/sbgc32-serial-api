@@ -85,7 +85,7 @@ extern 		"C" {
 #endif
 /*  = = = = = = = = = = = = = = = = = = = = = = = */
 
-#include	"../../sbgc32.h"
+#include	"sbgc32.h"
 
 
 #if (SBGC_IMU_MODULE)

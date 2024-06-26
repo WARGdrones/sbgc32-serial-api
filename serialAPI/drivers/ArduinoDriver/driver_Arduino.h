@@ -39,7 +39,7 @@
 #ifndef		_DRIVER_ARDUINO_H_
 #define		_DRIVER_ARDUINO_H_
 
-#include	"../../sbgc32.h"
+#include	"sbgc32.h"
 
 
 #if (SBGC_USE_ARDUINO_DRIVER)

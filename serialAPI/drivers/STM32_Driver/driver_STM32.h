@@ -44,7 +44,7 @@ extern		"C" {
 #endif
 /*  = = = = = = = = = = = = = = = = = = = = = = = */
 
-#include	"../../sbgc32.h"
+#include	"sbgc32.h"
 
 
 #if (SBGC_USE_STM32_DRIVER)
