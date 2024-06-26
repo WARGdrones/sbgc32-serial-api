@@ -191,7 +191,11 @@ typedef enum
 	RTDCF_MOTOR4_CONTROL			= BIT_9_SET,
 	RTDCF_AHRS_DEBUG_INFO			= BIT_10_SET,
 	RTDCF_ENCODER_RAW24				= BIT_11_SET,
-	RTDCF_IMU_ANGLES_RAD			= BIT_12_SET
+	RTDCF_IMU_ANGLES_RAD			= BIT_12_SET,
+	RTDCF_SCRIPT_VARS_FLOAT 		= BIT_13_SET,
+	RTDCF_SCRIPT_VARS_INT16 		= BIT_14_SET,
+	RTDCF_SYSTEM_POWER_STATE 		= BIT_15_SET,
+	RTDCF_FRAME_CAM_RATE 			= BIT_16_SET
 
 }	RealTimeDataCustomFlag_t;
 /**	@}
@@ -534,7 +538,10 @@ typedef struct __PACKED__
 	ui8		encoderRaw24 [3][3];					/*!<  3 bytes for each encoder in a sequence for
 														  ROLL, PITCH, YAW motors, lower byte first. Frw. ver. 2.68+					*/
 	float 	IMU_AnglesRad [3];						/*!<  Main IMU Euler angles in radians. Frw. ver. 2.68b7+							*/
-
+	float 	scriptVarsFloat[3]; /*Script variables in floats*/
+	i16 	scriptVarsInt16[3];
+	SystemPowerState_t 	systemPowerState;
+	i16 	frameCamRate[3];
 }			RealTimeDataCustom_t;
 /**	@}
  */
