@@ -56,48 +56,48 @@ extern		"C" {
 #include	"adjunct.h"
 
 /* Kernel code */
-#include	"sources/core/core.h"
+#include	"core.h"
 
 /* Enable used modules */
 #if (SBGC_ADJVAR_MODULE)
-	#include		"sources/adjvar/adjvar.h"
+	#include		"adjvar.h"
 #endif
 
 #if (SBGC_CALIB_MODULE)
-	#include		"sources/calib/calib.h"
+	#include		"calib.h"
 #endif
 
 #if (SBGC_CONTROL_MODULE)
-	#include		"sources/gimbalControl/gimbalControl.h"
+	#include		"gimbalControl.h"
 #endif
 
 #if (SBGC_EEPROM_MODULE)
-	#include		"sources/eeprom/eeprom.h"
+	#include		"eeprom.h"
 #endif
 
 #if (SBGC_IMU_MODULE)
-	#include		"sources/imu/imu.h"
+	#include		"imu.h"
 #endif
 
 #if (SBGC_PROFILES_MODULE)
-	#include		"sources/profiles/profiles.h"
+	#include		"profiles.h"
 #endif
 
 #if (SBGC_REALTIME_MODULE)
-	#include		"sources/realtime/realtime.h"
+	#include		"realtime.h"
 #endif
 
 #if (SBGC_SERVICE_MODULE)
-	#include		"sources/service/service.h"
+	#include		"service.h"
 #endif
 
 /* Enable driver modules */
 #if (SBGC_USE_LINUX_DRIVER)
-	#include		"drivers/LinuxDriver/driver_Linux.h"
+	#include		"driver_Linux.h"
 #endif
 
 #if (SBGC_USE_STM32_DRIVER)
-	#include		"drivers/STM32_Driver/driver_STM32.h"
+	#include		"driver_STM32.h"
 #endif
 
 /**	@addtogroup	Common
@@ -130,7 +130,7 @@ TxRxStatus_t SBGC32_Init_Custom (GeneralSBGC_t *generalSBGC, const char *dev, sp
 
 /* Enable Arduino driver module */
 #if (SBGC_USE_ARDUINO_DRIVER)
-	 #include		"drivers/ArduinoDriver/driver_Arduino.h"
+	 #include		"driver_Arduino.h"
 #endif
 
 

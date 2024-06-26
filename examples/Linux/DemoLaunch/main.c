@@ -247,28 +247,34 @@ TxRxStatus_t SBGC32_DemoControl (void)
         for (ui8 k = 0; k < countof_(AdjVarGeneral); k++)
             PrintStructElement(&SBGC32_Device, &AdjVarGeneral[k].value, AdjVarGeneral[k].name, AdjVarGeneral[k].varType);
 
+        printf("Demonstration Cycle #%d\n", i + 1);
+        printf("Moving to position #1\n");
         Control.AxisC[YAW].angle = DEGREE_TO_ANGLE_INT(50);
         Control.AxisC[PITCH].angle = DEGREE_TO_ANGLE_INT(-20);
         SBGC32_Control(&SBGC32_Device, &Control);
         DELAY_MS_(5000);
 
+        printf("Moving to position #2\n");
         Control.AxisC[PITCH].angle = DEGREE_TO_ANGLE_INT(20);
         SBGC32_Control(&SBGC32_Device, &Control);
         DELAY_MS_(5000);
 
+        printf("Moving to position #3\n");
         Control.AxisC[YAW].angle = DEGREE_TO_ANGLE_INT(-50);
         SBGC32_Control(&SBGC32_Device, &Control);
         DELAY_MS_(5000);
 
+        printf("Moving to position #4\n");
         Control.AxisC[PITCH].angle = DEGREE_TO_ANGLE_INT(-20);
         SBGC32_Control(&SBGC32_Device, &Control);
         DELAY_MS_(5000);
 
+        printf("Moving to position Home position\n");
         Control.AxisC[YAW].angle = DEGREE_TO_ANGLE_INT(0);
         Control.AxisC[PITCH].angle = DEGREE_TO_ANGLE_INT(0);
         SBGC32_Control(&SBGC32_Device, &Control);
         DELAY_MS_(5000);
-
+    
         BeeperSettings.mode = BM_BEEPER_MODE_COMPLETE;
         SBGC32_PlayBeeper(&SBGC32_Device, &BeeperSettings);
 
@@ -302,8 +308,8 @@ void PrintDataStream (ui8 *pBuff)
     BuffRPx += ConvertWithPM(RealTimeDataCustom.frameCamAngle, &pBuff[BuffRPx],
                              sizeof(RealTimeDataCustom.targetAngles), PM_DEFAULT_16BIT);
     // get PM_SYSTEM_POWER_STATE
-    BuffRPx += ConvertWithPM(&RealTimeDataCustom.systemPowerState, &pBuff[BuffRPx],
-                             sizeof(RealTimeDataCustom.systemPowerState), PM_SYSTEM_POWER_STATE);
+    // BuffRPx += ConvertWithPM(&RealTimeDataCustom.systemPowerState, &pBuff[BuffRPx],
+    //                          sizeof(RealTimeDataCustom.systemPowerState), PM_SYSTEM_POWER_STATE);
     BuffRPx += ConvertWithPM(RealTimeDataCustom.gyroData, &pBuff[BuffRPx],
                              sizeof(RealTimeDataCustom.gyroData), PM_DEFAULT_16BIT);
     BuffRPx += ConvertWithPM(RealTimeDataCustom.ACC_Data, &pBuff[BuffRPx],
