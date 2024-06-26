@@ -73,7 +73,7 @@ bool DriverInit (void **driver, const char *dev, speed_t baud)
 		// TODO: Is this closed if the code does not fail here? :D (I know, it's not)
 		close(drv->devFD);
 		drv->devFD == -1;
-		return;
+		return false;
 	}
 
 	cfsetispeed(&portConfigurations, baud);
@@ -95,6 +95,8 @@ bool DriverInit (void **driver, const char *dev, speed_t baud)
 	ioctl(drv->devFD, TIOCGSERIAL, &serial);
 	serial.flags |= ASYNC_LOW_LATENCY;
 	ioctl(drv->devFD, TIOCSSERIAL, &serial);
+
+	return true;
 }
 
 /**	@brief	Closes the driver object
