@@ -104,6 +104,7 @@ typedef enum
  */
 typedef enum
 {
+	CtrlF_CONTROL_FLAG_MIX_FOLLOW = BIT_4_SET, 		// Applicable for all modes frw. ver. 2.70b5+ 
 	CtrlF_CONTROL_FLAG_TARGET_PRECISE
 									= BIT_5_SET,	// Applicable for CtrlM_MODE_ANGLE or CtrlM_MODE_ANGLE_REL_FRAME frw. ver. 2.70b1+
 	CtrlF_CONTROL_FLAG_AUTO_TASK	= BIT_6_SET,	// Applicable for CtrlM_MODE_ANGLE or CtrlM_MODE_ANGLE_REL_FRAME frw. ver. 2.62b7+
