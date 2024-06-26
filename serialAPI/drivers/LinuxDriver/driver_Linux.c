@@ -44,7 +44,7 @@
  *	@param	baud - baud rate
  */
 
-void DriverInit (void **driver, const char *dev, speed_t baud)
+bool DriverInit (void **driver, const char *dev, speed_t baud)
 {
 	*driver = malloc(sizeof(Driver_t));
 
@@ -60,7 +60,7 @@ void DriverInit (void **driver, const char *dev, speed_t baud)
 	{
 		char errorStr [] = "SBGC Driver: Device not found!\n";
 		PrintDebugData(errorStr, strlen(errorStr));
-		return;
+		return false;
 	}
 
 	struct termios portConfigurations;
