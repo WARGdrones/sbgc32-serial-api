@@ -131,9 +131,10 @@ int main(int argc, char **argv)
 
     /* - - - - - - - - - - - - Program Launch - - - - - - - - - - - - */
 
-    /* SBGC32_Reset(&SBGC32_Device, RF_RESTART_CONFIRMATION, 5000);
+    SBGC32_Reset(&SBGC32_Device, RF_FULL_RESET_CONFIRMATION, 1000);
     SBGC32_CheckConfirmation(&SBGC32_Device, CMD_RESET);
-    DELAY_MS_(5000); */
+    DELAY_MS_(10000); 
+    SBGC32_CheckConfirmation(&SBGC32_Device, CMD_RESET);
 
     PrintBoardParameters(P_CURRENT_PROFILE);
 
