@@ -82,7 +82,7 @@ extern 		"C" {
 #define     MAX_BUFF_SIZE           256				/*!<  256 is recommended value. Maximum buffer size for communication with SBGC32.
  	 	 	 	 	 	 	 	 	 	 	 	 	 	  Can be reduced in order to minimize a RAM load in the control system			*/
 
-#define		UNEXP_CMD_BUFFER		SET_ON			/*!<  Disable or enable command buffering											*/
+#define UNEXP_CMD_BUFFER SET_OFF	   /*!<  Disable or enable command buffering											*/
 	#define	UNEXP_CMD_BUFFER_SIZE	10				/*!<  1 Min --> 16 Max. Buffer size for received unexpected serial commands.
 														  Various powers of 2															*/
 	#define	UNEXP_CMD_OLD_PRIORITY	SET_OFF			/*!<  If set on, a buffer wouldn't save the new commands to prevent overflow.
