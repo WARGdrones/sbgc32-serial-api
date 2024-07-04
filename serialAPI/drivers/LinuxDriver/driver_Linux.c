@@ -168,11 +168,11 @@ ui8 PortTransmitData (void *driver, ui8 *data, ui16 size)
  *
  *	@return	Number of available bytes
  */
-ui16 GetAvailableBytes (void *driver)
+ui32 GetAvailableBytes (void *driver)
 {
 	Driver_t *drv = (Driver_t*)driver;
 
-	ui16 bytes;
+	ui32 bytes;
 	ioctl(drv->devFD, FIONREAD, &bytes);
 	return bytes;
 }

@@ -95,7 +95,7 @@ ui32 GetTimeMs (void *driver);
 
 ui8 PortTransmitData (void *driver, ui8 *data, ui16 size);
 
-ui16 GetAvailableBytes (void *driver);
+ui32 GetAvailableBytes (void *driver);
 ui8 PortReceiveByte (void *driver, ui8 *data);
 
 void PrintDebugData (char *data, ui16 length);
