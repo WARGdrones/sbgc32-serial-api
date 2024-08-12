@@ -71,7 +71,7 @@ extern 		"C" {
 #define		SYS_BIG_ENDIAN			SET_OFF			/*!<  Memory organization of target-control device.
 	 	 	 	 	 	 	 	 	 	 	 	 	 	  LITTLE ENDIAN if this macro is set off										*/
 
-#define		SBGC_DEBUG_MODE			SET_ON			/*!<  Debug mode flag for handling detailed system information out					*/
+#define		SBGC_DEBUG_MODE			SET_OFF			/*!<  Debug mode flag for handling detailed system information out					*/
 #define		SBGC_CONFIRM_CMD		SET_ON			/*!<  Service flag that responsible for CMD_CONFIRM commands handling
 														  (wait for confirmation and set the corresponding flag)						*/
 #define		SBGC_REF_INFO			SET_OFF			/*!<  Debug mode flag for getting access to auxiliary info about system parameters	*/
