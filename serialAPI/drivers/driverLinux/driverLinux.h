@@ -71,7 +71,9 @@ extern		"C" {
 #include	<unistd.h>
 #include	<termios.h>
 #include	<time.h>
-
+#include 	<linux/serial.h>
+#include 	"string.h"
+#include 	"stdlib.h"
 
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  *							Configuration Protection
@@ -120,6 +122,7 @@ typedef struct
  *								 Function Prototypes
  */
 void DriverSBGC32_Init (void **driver, const char *dev, ui32 serialSpeed);
+void DriverSBGC32_Close (void *driver);
 
 sbgcTicks_t DriverSBGC32_GetTimeMs (void *driver);
 

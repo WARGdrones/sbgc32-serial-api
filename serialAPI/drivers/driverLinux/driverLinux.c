@@ -85,6 +85,27 @@ void DriverSBGC32_Init (void **driver, const char *dev, ui32 serialSpeed)
 	portConfigurations.c_oflag &= ~OPOST;
 
 	tcsetattr(drv->devFD, TCSANOW, &portConfigurations);
+
+	//Set low latency mode, stackoverflow.com/a/43496519
+	struct serial_struct serial;
+	ioctl(drv->devFD, TIOCGSERIAL, &serial);
+	serial.flags |= ASYNC_LOW_LATENCY;
+	ioctl(drv->devFD, TIOCSSERIAL, &serial);
+}
+
+/**	@brief	Closes the driver object
+ *
+ *	@param	*Driver - main hardware driver object
+ */
+void DriverSBGC32_Close(void *driver)
+{
+	sbgcDriver_t *drv = (sbgcDriver_t *)driver;
+
+	if (drv->devFD != -1)
+	{
+		close(drv->devFD);
+		drv->devFD = -1;
+	}
 }
 
 
