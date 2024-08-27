@@ -100,6 +100,7 @@ target_include_directories(${PROJECT_NAME} INTERFACE
   $<INSTALL_INTERFACE:include>
 )
 
+# Get header paths and add them to the target include directories
 foreach(header ${HEADERS})
   get_filename_component(header_path ${header} DIRECTORY)
   target_include_directories(${PROJECT_NAME} PRIVATE ${header_path})
@@ -117,10 +118,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVE
 #   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"
 # )
 
-# Install include directories
-install(FILES ${HEADERS}
-  DESTINATION include/${PROJECT_NAME}
-)
+# install headers to their respective directories
+INSTALL (
+    DIRECTORY ${CMAKE_SOURCE_DIR}/serialAPI/
+    DESTINATION include/${PROJECT_NAME}
+    FILES_MATCHING PATTERN "*.h*")
+    
 # install the shared library
 install(TARGETS ${PROJECT_NAME} DESTINATION "${CMAKE_INSTALL_LIBDIR}" EXPORT ${PROJECT_NAME}Config)
 
