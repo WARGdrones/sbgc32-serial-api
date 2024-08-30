@@ -68,3 +68,5 @@ dkms.conf
 *.cyclo
 
 build/*
+examples/Linux/QuickStart/build/*
+examples/Linux/DemoLaunch/build/*
